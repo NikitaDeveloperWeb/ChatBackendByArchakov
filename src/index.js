@@ -20,5 +20,5 @@ var io = socket_1.default(http);
 routes_1.default(app, io);
 var PORT = process.env.PORT ? Number(process.env.PORT) : 3003;
 http.listen(PORT, function () {
-  console.log("Server: http://localhost:" + PORT);
+  console.log("Server port: " + PORT);
 });
