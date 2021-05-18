@@ -19,17 +19,17 @@ var DialogController = /** @class */ (function () {
             var userId = req.user._id;
             models_1.DialogModel.find()
                 .or([{ author: userId }, { partner: userId }])
-                .populate(['author', 'partner'])
+                .populate(["author", "partner"])
                 .populate({
-                path: 'lastMessage',
+                path: "lastMessage",
                 populate: {
-                    path: 'user',
+                    path: "user",
                 },
             })
                 .exec(function (err, dialogs) {
                 if (err) {
                     return res.status(404).json({
-                        message: 'Dialogs not found',
+                        message: "Dialogs not found",
                     });
                 }
                 return res.json(dialogs);
@@ -46,14 +46,14 @@ var DialogController = /** @class */ (function () {
             }, function (err, dialog) {
                 if (err) {
                     return res.status(500).json({
-                        status: 'error',
+                        status: "error",
                         message: err,
                     });
                 }
                 if (dialog) {
                     return res.status(403).json({
-                        status: 'error',
-                        message: 'Такой диалог уже есть',
+                        status: "error",
+                        message: "Такой диалог уже есть",
                     });
                 }
                 else {
@@ -72,7 +72,7 @@ var DialogController = /** @class */ (function () {
                             dialogObj.lastMessage = message._id;
                             dialogObj.save().then(function () {
                                 res.json(dialogObj);
-                                _this.io.emit('SERVER:DIALOG_CREATED', __assign(__assign({}, postData), { dialog: dialogObj }));
+                                _this.io.emit("SERVER:DIALOG_CREATED", __assign(__assign({}, postData), { dialog: dialogObj }));
                             });
                         })
                             .catch(function (reason) {
@@ -81,7 +81,7 @@ var DialogController = /** @class */ (function () {
                     })
                         .catch(function (err) {
                         res.json({
-                            status: 'error',
+                            status: "error",
                             message: err,
                         });
                     });
