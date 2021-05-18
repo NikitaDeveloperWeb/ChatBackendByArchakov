@@ -72,7 +72,7 @@ var DialogController = /** @class */ (function () {
                             dialogObj.lastMessage = message._id;
                             dialogObj.save().then(function () {
                                 res.json(dialogObj);
-                                _this.io.emit("SERVER:DIALOG_CREATED", __assign(__assign({}, postData), { dialog: dialogObj }));
+                                _this.io.emit("SERVER:DIALOG_CREATED", __assign({}, postData, { dialog: dialogObj }));
                             });
                         })
                             .catch(function (reason) {

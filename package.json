@@ -8,7 +8,7 @@
     "eslint": "eslint --ext .ts,.js --fix --quiet .",
     "watch": "nodemon ts-node src/index.ts",
     "build": "tsc",
-    "postinstall": "yarn build",
+    "postinstall": "npm build",
     "tsc": "tsc"
   },
   "devDependencies": {
