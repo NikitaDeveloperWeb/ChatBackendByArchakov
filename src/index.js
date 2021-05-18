@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var dotenv_1 = __importDefault(require("dotenv"));
@@ -16,5 +20,5 @@ var io = socket_1.default(http);
 routes_1.default(app, io);
 var PORT = process.env.PORT ? Number(process.env.PORT) : 3003;
 http.listen(PORT, function () {
-    console.log("Server: http://localhost:" + PORT);
+  console.log("Server: http://localhost:" + PORT);
 });
