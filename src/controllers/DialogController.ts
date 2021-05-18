@@ -1,7 +1,7 @@
-import express from 'express';
-import socket from 'socket.io';
+import express from "express";
+import socket from "socket.io";
 
-import { DialogModel, MessageModel } from '../models';
+import { DialogModel, MessageModel } from "../models";
 
 class DialogController {
   io: socket.Server;
@@ -15,17 +15,17 @@ class DialogController {
 
     DialogModel.find()
       .or([{ author: userId }, { partner: userId }])
-      .populate(['author', 'partner'])
+      .populate(["author", "partner"])
       .populate({
-        path: 'lastMessage',
+        path: "lastMessage",
         populate: {
-          path: 'user',
+          path: "user",
         },
       })
       .exec(function (err: any, dialogs: any) {
         if (err) {
           return res.status(404).json({
-            message: 'Dialogs not found',
+            message: "Dialogs not found",
           });
         }
         return res.json(dialogs);
@@ -46,51 +46,57 @@ class DialogController {
       (err: any, dialog: any) => {
         if (err) {
           return res.status(500).json({
-            status: 'error',
+            status: "error",
             message: err,
           });
         }
         if (dialog) {
           return res.status(403).json({
-            status: 'error',
-            message: 'Такой диалог уже есть',
+            status: "error",
+            message: "Такой диалог уже есть",
           });
         } else {
           const dialog = new DialogModel(postData);
 
           dialog
             .save()
-            .then((dialogObj: { _id: any; lastMessage: any; save: () => Promise<any>; }) => {
-              const message = new MessageModel({
-                text: req.body.text,
-                user: req.user._id,
-                dialog: dialogObj._id,
-              });
-
-              message
-                .save()
-                .then(() => {
-                  dialogObj.lastMessage = message._id;
-                  dialogObj.save().then(() => {
-                    res.json(dialogObj);
-                    this.io.emit('SERVER:DIALOG_CREATED', {
-                      ...postData,
-                      dialog: dialogObj,
-                    });
-                  });
-                })
-                .catch((reason: any) => {
-                  res.json(reason);
+            .then(
+              (dialogObj: {
+                _id: any;
+                lastMessage: any;
+                save: () => Promise<any>;
+              }) => {
+                const message = new MessageModel({
+                  text: req.body.text,
+                  user: req.user._id,
+                  dialog: dialogObj._id,
                 });
-            })
+
+                message
+                  .save()
+                  .then(() => {
+                    dialogObj.lastMessage = message._id;
+                    dialogObj.save().then(() => {
+                      res.json(dialogObj);
+                      this.io.emit("SERVER:DIALOG_CREATED", {
+                        ...postData,
+                        dialog: dialogObj,
+                      });
+                    });
+                  })
+                  .catch((reason: any) => {
+                    res.json(reason);
+                  });
+              }
+            )
             .catch((err: any) => {
               res.json({
-                status: 'error',
+                status: "error",
                 message: err,
               });
             });
         }
-      },
+      }
     );
   };
 
